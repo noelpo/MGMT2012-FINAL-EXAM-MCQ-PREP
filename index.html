@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>No Limits Tutorial Service MGMT2012 FINAL EXAM PREP QUIZ</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+    #timer {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: bold;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    #quiz-container {
+      max-width: 800px;
+      margin: auto;
+      background: rgba(255,255,255,0.95);
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+    }
+    .question h2 {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .answers { list-style: none; }
+    .answers li { margin: 10px 0; }
+    .answers label {
+      display: block;
+      padding: 12px;
+      background: #f5f6fa;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .answers label:hover {
+      border-color: #667eea;
+      background: #eef2ff;
+    }
+    .answers input { margin-right: 10px; }
+    .nav-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+    button {
+      padding: 12px 25px;
+      font-size: 1rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    #result ul {
+      margin-top: 20px;
+      text-align: left;
+      list-style: none;
+      padding: 0;
+    }
+    .correct-answer {
+      color: green;
+      font-weight: bold;
+    }
+    .wrong-answer {
+      color: red;
+      font-weight: bold;
+    }
+    @media (max-width: 600px) {
+      #quiz-container {
+        padding: 20px;
+      }
+      button {
+        width: 100%;
+        margin-top: 15px;
+      }
+      .nav-buttons {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h1>MGMT2012 FINAL EXAM PREP QUIZ </h1>
+<div id="timer">Time: 15:00</div>
+<div id="quiz-container"></div>
+
+<script>
+  const questions = [
+    { q:"1. If in a normal distribution, the probability P(Z > z) = 0.1245, what is the value of z?", choices:["A. 0.80","B. 1.15","C. 1.65","D. 2.25"], answer:1 },
+    { q:"2. In a World Cup match, the average number of goals scored is 3. What type of probability distribution best models this situation?", choices:["A. Discrete","B. Normal","C. Binomial","D. Poisson"], answer:3 },
+    { q:"3. Let X be a discrete random variable with cumulative distribution function F(x). Which of the following correctly represents P(3 ≤ X ≤ 6)?", choices:["A. F(6) − F(3)","B. F(6) − F(2)","C. F(5) − F(3)","D. F(6) + F(3)"], answer:1 },
+    { q:"4. A deterministic model is a model in which the outcome is known with", choices:["A. Risk","B. Uncertainty","C. Randomness","D. Certainty"], answer:3 },
+    { q:"5. What is the main difference between a random variable and a discrete variable?", choices:["A. A random variable takes only whole numbers","B. A random variable describes chance outcomes while a discrete variable is a type that takes countable values","C. A random variable is continuous and discrete is qualitative","D. There is no difference"], answer:1 },
+    { q:"6. Monte Carlo Simulation is based on which type of behavior?", choices:["A. Deterministic","B. Stochastic"], answer:1 },
+    { q:"7. Events A and B are statistically independent if", choices:["A. P(A ∩ B) = P(A) × P(B)","B. P(A | B) = P(B)","C. P(A ∪ B) = P(A) + P(B)","D. P(A ∩ B) cannot be determined"], answer:0 },
+    { q:"8. Which of the following is NOT an advantage of a stochastic model?", choices:["A. Flexibility","B. Optimal solutions","C. Handles large and complex systems","D. Answers what‑if questions"], answer:1 },
+    { q:"9. Which of the following is NOT an advantage of simulation?", choices:["A. Flexibility","B. Optimal solutions","C. Handles large and complex systems","D. Answers what‑if questions"], answer:1 },
+    { q:"10. Activities A, C, and D are the immediate predecessors of activity K with times 10, 12, and 14 days respectively. What is the earliest time at which activity K can start?", choices:["A. 10","B. 12","C. 13","D. 14"], answer:3 },
+    { q:"11. The expected project duration is 45 minutes and the variance is 6.25. What is the probability that the project will be completed in less than 40 minutes?", choices:["A. 0.0228","B. 0.1587","C. 0.5000","D. 0.9772"], answer:0 },
+    { q:"12. Which of the following best describes a situation of uncertainty in decision‑making?", choices:["A. There is insufficient information and outcomes are not guaranteed","B. All information is available","C. Decisions are made with certainty","D. The outcome is always positive"], answer:0 },
+    { q:"13. Which of the following best describes a deterministic simulation model?", choices:["A. All decisions are made under uncertainty","B. Alternatives are clearly known in advance","C. It is always used in Monte Carlo simulation","D. Random numbers are used for decision variables"], answer:1 },
+    { q:"14. Which rule is used to find the probability of either event A or event B occurring?", choices:["A. Rule of independence","B. Rule of complements","C. Rule of unions","D. Rule of intersections"], answer:2 },
+    { q:"15. Which distribution is described as a bell‑shaped curve and is widely used for continuous random variables?", choices:["A. Geometric","B. Binomial","C. Poisson","D. Normal"], answer:3 },
+    { q:"16. What is the complement of an event A?", choices:["A. All elements in A","B. All elements in the universal set not in A","C. Intersection of A and B","D. Union of A and B"], answer:1 },
+    { q:"17. Which of the following is NOT an advantage of simulation?", choices:["A. Simulation always provides optimal solutions","B. Policy decisions can be made faster","C. Flexibility in analysing complex problems","D. Experiments without disturbing real systems"], answer:0 },
+    { q:"18. Which of the following is a key feature of Monte Carlo simulation?", choices:["A. It relies on random sampling from probability distributions","B. Only deterministic models","C. No data required","D. Guarantees optimal solutions"], answer:0 },
+    { q:"19. Which of the following is NOT a characteristic of objective probability?", choices:["A. Based on equally likely events","B. Same for all observers","C. Based on personal beliefs","D. Long run relative frequency"], answer:2 },
+    { q:"20. What is the first step in conducting a Monte Carlo simulation?", choices:["A. Validate the model","B. Establish a probability distribution for the variables","C. Select the best alternative","D. Generate random numbers"], answer:1 },
+    { q:"21. What is a random variable?", choices:["A. Outcome of one experiment","B. A variable that is always constant","C. A function that assigns a value to each element of a sample space","D. The sum of all probabilities"], answer:2 }
+  ];
+
+  let current = 0;
+  let userAnswers = [];
+  let timeLeft = 900;  // 15 minutes in seconds
+  let timerInterval;
+  const container = document.getElementById("quiz-container");
+  const timerDisplay = document.getElementById("timer");
+
+  function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 900;
+    timerDisplay.style.display = "block";
+    updateTimer();
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      updateTimer();
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        autoSubmit();
+      }
+    }, 1000);
+  }
+
+  function updateTimer() {
+    const m = Math.floor(timeLeft / 60);
+    const s = timeLeft % 60;
+    timerDisplay.textContent = `Time: ${m}:${s.toString().padStart(2,"0")}`;
+  }
+
+  function showQuestion(i) {
+    const q = questions[i];
+    container.innerHTML = `
+      <div class="question">
+        <h2>${q.q}</h2>
+        <ul class="answers">
+          ${q.choices.map((c,idx) => `
+            <li>
+              <label>
+                <input type="radio" name="choice" value="${idx}" ${userAnswers[i] === idx ? "checked" : ""}>
+                ${c}
+              </label>
+            </li>
+          `).join("")}
+        </ul>
+        <div class="nav-buttons">
+          <button id="prev" ${i===0 ? "disabled" : ""}>← Previous</button>
+          <button id="next">${i === questions.length - 1 ? "Finish" : "Next →"}</button>
+        </div>
+      </div>
+    `;
+    if (i > 0) {
+      document.getElementById("prev").onclick = () => {
+        saveAnswer(i);
+        current--;
+        showQuestion(current);
+      };
+    }
+    document.getElementById("next").onclick = () => {
+      if (!saveAnswer(i)) return;
+      if (i < questions.length - 1) {
+        current++;
+        showQuestion(current);
+      } else {
+        clearInterval(timerInterval);
+        showResults();
+      }
+    };
+  }
+
+  function saveAnswer(i) {
+    const sel = document.querySelector("input[name='choice']:checked");
+    if (!sel) {
+      alert("Please select an answer!");
+      return false;
+    }
+    userAnswers[i] = parseInt(sel.value);
+    return true;
+  }
+
+  function autoSubmit() {
+    for (let i = 0; i < questions.length; i++) {
+      if (userAnswers[i] === undefined) userAnswers[i] = -1;
+    }
+    showResults();
+  }
+
+  function showResults() {
+    timerDisplay.style.display = "none";
+    let score = 0;
+    container.innerHTML = `<div id="result"><h2>Results</h2></div>`;
+    const ul = document.createElement("ul");
+    questions.forEach((q, i) => {
+      const li = document.createElement("li");
+      if (userAnswers[i] === q.answer) {
+        score++;
+        li.textContent = `Q${i+1}: ✅ Correct — Your answer: ${q.choices[q.answer]}`;
+        li.className = "correct-answer";
+      } else {
+        li.textContent = `Q${i+1}: ❌ Wrong — Correct answer: ${q.choices[q.answer]}`;
+        li.className = "wrong-answer";
+      }
+      ul.appendChild(li);
+    });
+    container.appendChild(ul);
+    container.innerHTML += `<p>Your score: ${score} / ${questions.length}</p>`;
+
+    const restartBtn = document.createElement("button");
+    restartBtn.textContent = "Restart Quiz";
+    restartBtn.onclick = () => {
+      userAnswers = [];
+      current = 0;
+      startTimer();
+      showQuestion(current);
+    };
+    container.appendChild(restartBtn);
+  }
+
+  // initialize
+  startTimer();
+  showQuestion(current);
+</script>
+
+</body>
+</html>
