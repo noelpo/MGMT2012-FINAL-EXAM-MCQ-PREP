@@ -3,192 +3,379 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>No Limits Tutorial Service MGMT2012 FINAL EXAM PREP QUIZ</title>
+  <title>MGMT2012 Final Exam Prep Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --teal:    #2ec4b6;
+      --teal-dk: #1a9e92;
+      --navy:    #0d1b2a;
+      --slate:   #1e3a5f;
+      --fog:     #f0f4f8;
+      --white:   #ffffff;
+      --muted:   #64748b;
+      --border:  #dde3ea;
+      --green:   #16a34a;
+      --red:     #dc2626;
+      --radius:  14px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
       min-height: 100vh;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 20px;
+      color: var(--navy);
     }
-    h1 {
-      text-align: center;
-      color: white;
-      margin-bottom: 30px;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+
+    /* ── Header ── */
+    .header {
+      background: var(--slate);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
     }
-    #timer {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: white;
-      padding: 10px 18px;
-      border-radius: 12px;
-      font-weight: bold;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    .header-title {
+      font-family: 'DM Serif Display', serif;
+      color: var(--white);
+      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+      line-height: 1.3;
     }
-    #quiz-container {
-      max-width: 800px;
-      margin: auto;
-      background: rgba(255,255,255,0.95);
-      padding: 30px;
-      border-radius: 18px;
-      box-shadow: 0 15px 50px rgba(0,0,0,0.3);
-    }
-    .question h2 {
-      font-size: 1.1rem;
-      margin-bottom: 20px;
-      color: #333;
-    }
-    .answers { list-style: none; }
-    .answers li { margin: 10px 0; }
-    .answers label {
+    .header-title span {
       display: block;
-      padding: 12px;
-      background: #f5f6fa;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--teal);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    /* ── Timer ── */
+    #timer {
+      background: var(--navy);
+      color: var(--white);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      border: 1.5px solid rgba(46,196,182,0.4);
+      white-space: nowrap;
+      transition: background 0.3s, color 0.3s;
+    }
+    #timer.urgent {
+      background: var(--red);
+      border-color: var(--red);
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+
+    /* ── Progress bar ── */
+    .progress-wrap {
+      background: var(--slate);
+      padding: 10px 24px 0;
+    }
+    .progress-track {
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), #66e0d8);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+    .progress-label {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.45);
+      text-align: right;
+      padding-bottom: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Main layout ── */
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 28px 16px 60px;
+    }
+
+    /* ── Question card ── */
+    .q-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 28px 28px 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      animation: slideIn 0.25s ease;
+    }
+    @keyframes slideIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+    .q-number {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--teal-dk);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .q-text {
+      font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+      font-weight: 500;
+      color: var(--navy);
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    /* ── Answer options ── */
+    .answers { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .answers li label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 16px;
+      background: var(--fog);
+      border: 1.5px solid var(--border);
       border-radius: 10px;
       cursor: pointer;
-      border: 2px solid transparent;
-      transition: border-color 0.2s, background 0.2s;
+      font-size: 0.93rem;
+      color: var(--navy);
+      transition: border-color 0.18s, background 0.18s, transform 0.12s;
+      user-select: none;
     }
-    .answers label:hover {
-      border-color: #667eea;
-      background: #eef2ff;
+    .answers li label:hover {
+      border-color: var(--teal);
+      background: #e6faf8;
+      transform: translateX(3px);
     }
-    .answers input { margin-right: 10px; }
+    .answers li input[type="radio"] { accent-color: var(--teal); width: 16px; height: 16px; flex-shrink: 0; }
+    .answers li input[type="radio"]:checked + span { font-weight: 600; color: var(--teal-dk); }
+    .answers li:has(input:checked) label {
+      border-color: var(--teal);
+      background: #e6faf8;
+    }
+
+    /* ── Nav buttons ── */
     .nav-buttons {
-      margin-top: 20px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      margin-top: 26px;
+      gap: 12px;
     }
-    button {
-      padding: 12px 25px;
-      font-size: 1rem;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
+    .btn {
+      padding: 11px 24px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
       border: none;
-      border-radius: 20px;
+      border-radius: 50px;
       cursor: pointer;
+      transition: opacity 0.18s, transform 0.12s;
     }
-    #result ul {
-      margin-top: 20px;
-      text-align: left;
-      list-style: none;
-      padding: 0;
+    .btn:active { transform: scale(0.97); }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
     }
-    .correct-answer {
-      color: green;
-      font-weight: bold;
+    .btn-outline:hover { border-color: var(--navy); color: var(--navy); }
+    .btn-outline:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dk) 100%);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(46,196,182,0.35);
     }
-    .wrong-answer {
-      color: red;
-      font-weight: bold;
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(220,38,38,0.3);
     }
-    @media (max-width: 600px) {
-      #quiz-container {
-        padding: 20px;
-      }
-      button {
-        width: 100%;
-        margin-top: 15px;
-      }
-      .nav-buttons {
-        flex-direction: column;
-        gap: 10px;
-      }
+
+    /* ── Results ── */
+    .results-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .results-header h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+    .score-badge {
+      display: inline-block;
+      background: var(--teal);
+      color: var(--white);
+      font-size: clamp(1.4rem, 4vw, 1.8rem);
+      font-weight: 700;
+      padding: 12px 32px;
+      border-radius: 50px;
+      margin: 10px 0;
+      box-shadow: 0 4px 20px rgba(46,196,182,0.4);
+    }
+    .score-sub {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 4px;
+    }
+
+    .result-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .result-item {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 14px 18px;
+      border-left: 4px solid var(--border);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+    .result-item.correct { border-left-color: var(--green); }
+    .result-item.wrong   { border-left-color: var(--red); }
+    .result-item .ri-label {
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .result-item.correct .ri-label { color: var(--green); }
+    .result-item.wrong   .ri-label { color: var(--red); }
+    .result-item .ri-q   { color: var(--navy); margin-bottom: 6px; font-weight: 500; }
+    .result-item .ri-ans { color: var(--muted); font-size: 0.84rem; }
+    .result-item.wrong .ri-correct { color: var(--green); font-weight: 600; margin-top: 4px; font-size: 0.84rem; }
+
+    .results-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .q-card { padding: 20px 16px 18px; }
+      .nav-buttons { flex-wrap: wrap; }
+      .nav-buttons .btn { flex: 1; text-align: center; }
+      .header { flex-wrap: wrap; gap: 8px; }
     }
   </style>
 </head>
 <body>
 
-<h1>MGMT2012 FINAL EXAM PREP QUIZ </h1>
-<div id="timer">Time: 15:00</div>
-<div id="quiz-container"></div>
+<header class="header">
+  <div class="header-title">
+    <span>No Limits Tutorial Services</span>
+    MGMT2012  Final Exam Prep Quiz
+  </div>
+  <div id="timer">15:00</div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <div class="progress-label" id="progress-label">Question 1 of 21</div>
+</div>
+
+<main>
+  <div id="quiz-container"></div>
+</main>
 
 <script>
   const questions = [
-    { q:"1. If in a normal distribution, the probability P(Z > z) = 0.1245, what is the value of z?", choices:["A. 0.80","B. 1.15","C. 1.65","D. 2.25"], answer:1 },
-    { q:"2. In a World Cup match, the average number of goals scored is 3. What type of probability distribution best models this situation?", choices:["A. Discrete","B. Normal","C. Binomial","D. Poisson"], answer:3 },
-    { q:"3. Let X be a discrete random variable with cumulative distribution function F(x). Which of the following correctly represents P(3 ≤ X ≤ 6)?", choices:["A. F(6) − F(3)","B. F(6) − F(2)","C. F(5) − F(3)","D. F(6) + F(3)"], answer:1 },
-    { q:"4. A deterministic model is a model in which the outcome is known with", choices:["A. Risk","B. Uncertainty","C. Randomness","D. Certainty"], answer:3 },
-    { q:"5. What is the main difference between a random variable and a discrete variable?", choices:["A. A random variable takes only whole numbers","B. A random variable describes chance outcomes while a discrete variable is a type that takes countable values","C. A random variable is continuous and discrete is qualitative","D. There is no difference"], answer:1 },
-    { q:"6. Monte Carlo Simulation is based on which type of behavior?", choices:["A. Deterministic","B. Stochastic"], answer:1 },
-    { q:"7. Events A and B are statistically independent if", choices:["A. P(A ∩ B) = P(A) × P(B)","B. P(A | B) = P(B)","C. P(A ∪ B) = P(A) + P(B)","D. P(A ∩ B) cannot be determined"], answer:0 },
-    { q:"8. Which of the following is NOT an advantage of a stochastic model?", choices:["A. Flexibility","B. Optimal solutions","C. Handles large and complex systems","D. Answers what‑if questions"], answer:1 },
-    { q:"9. Which of the following is NOT an advantage of simulation?", choices:["A. Flexibility","B. Optimal solutions","C. Handles large and complex systems","D. Answers what‑if questions"], answer:1 },
-    { q:"10. Activities A, C, and D are the immediate predecessors of activity K with times 10, 12, and 14 days respectively. What is the earliest time at which activity K can start?", choices:["A. 10","B. 12","C. 13","D. 14"], answer:3 },
-    { q:"11. The expected project duration is 45 minutes and the variance is 6.25. What is the probability that the project will be completed in less than 40 minutes?", choices:["A. 0.0228","B. 0.1587","C. 0.5000","D. 0.9772"], answer:0 },
-    { q:"12. Which of the following best describes a situation of uncertainty in decision‑making?", choices:["A. There is insufficient information and outcomes are not guaranteed","B. All information is available","C. Decisions are made with certainty","D. The outcome is always positive"], answer:0 },
-    { q:"13. Which of the following best describes a deterministic simulation model?", choices:["A. All decisions are made under uncertainty","B. Alternatives are clearly known in advance","C. It is always used in Monte Carlo simulation","D. Random numbers are used for decision variables"], answer:1 },
-    { q:"14. Which rule is used to find the probability of either event A or event B occurring?", choices:["A. Rule of independence","B. Rule of complements","C. Rule of unions","D. Rule of intersections"], answer:2 },
-    { q:"15. Which distribution is described as a bell‑shaped curve and is widely used for continuous random variables?", choices:["A. Geometric","B. Binomial","C. Poisson","D. Normal"], answer:3 },
-    { q:"16. What is the complement of an event A?", choices:["A. All elements in A","B. All elements in the universal set not in A","C. Intersection of A and B","D. Union of A and B"], answer:1 },
-    { q:"17. Which of the following is NOT an advantage of simulation?", choices:["A. Simulation always provides optimal solutions","B. Policy decisions can be made faster","C. Flexibility in analysing complex problems","D. Experiments without disturbing real systems"], answer:0 },
-    { q:"18. Which of the following is a key feature of Monte Carlo simulation?", choices:["A. It relies on random sampling from probability distributions","B. Only deterministic models","C. No data required","D. Guarantees optimal solutions"], answer:0 },
-    { q:"19. Which of the following is NOT a characteristic of objective probability?", choices:["A. Based on equally likely events","B. Same for all observers","C. Based on personal beliefs","D. Long run relative frequency"], answer:2 },
-    { q:"20. What is the first step in conducting a Monte Carlo simulation?", choices:["A. Validate the model","B. Establish a probability distribution for the variables","C. Select the best alternative","D. Generate random numbers"], answer:1 },
-    { q:"21. What is a random variable?", choices:["A. Outcome of one experiment","B. A variable that is always constant","C. A function that assigns a value to each element of a sample space","D. The sum of all probabilities"], answer:2 }
+    { q:"If in a normal distribution, the probability P(Z > z) = 0.1245, what is the value of z?", choices:["A. 0.80","B. 1.15","C. 1.65","D. 2.25"], answer:1 },
+    { q:"In a World Cup match, the average number of goals scored is 3. What type of probability distribution best models this situation?", choices:["A. Discrete","B. Normal","C. Binomial","D. Poisson"], answer:3 },
+    { q:"Let X be a discrete random variable with cumulative distribution function F(x). Which of the following correctly represents P(3 ≤ X ≤ 6)?", choices:["A. F(6) − F(3)","B. F(6) − F(2)","C. F(5) − F(3)","D. F(6) + F(3)"], answer:1 },
+    { q:"A deterministic model is a model in which the outcome is known with:", choices:["A. Risk","B. Uncertainty","C. Randomness","D. Certainty"], answer:3 },
+    { q:"What is the main difference between a random variable and a discrete variable?", choices:["A. A random variable takes only whole numbers","B. A random variable describes chance outcomes while a discrete variable is a type that takes countable values","C. A random variable is continuous and discrete is qualitative","D. There is no difference"], answer:1 },
+    { q:"Monte Carlo Simulation is based on which type of behavior?", choices:["A. Deterministic","B. Stochastic"], answer:1 },
+    { q:"Events A and B are statistically independent if:", choices:["A. P(A ∩ B) = P(A) × P(B)","B. P(A | B) = P(B)","C. P(A ∪ B) = P(A) + P(B)","D. P(A ∩ B) cannot be determined"], answer:0 },
+    { q:"Which of the following is NOT an advantage of a stochastic model?", choices:["A. Flexibility","B. Optimal solutions","C. Handles large and complex systems","D. Answers what-if questions"], answer:1 },
+    { q:"Which of the following is NOT an advantage of simulation?", choices:["A. Flexibility","B. Optimal solutions","C. Handles large and complex systems","D. Answers what-if questions"], answer:1 },
+    { q:"Activities A, C, and D are the immediate predecessors of activity K with times 10, 12, and 14 days respectively. What is the earliest time at which activity K can start?", choices:["A. 10","B. 12","C. 13","D. 14"], answer:3 },
+    { q:"The expected project duration is 45 minutes and the variance is 6.25. What is the probability that the project will be completed in less than 40 minutes?", choices:["A. 0.0228","B. 0.1587","C. 0.5000","D. 0.9772"], answer:0 },
+    { q:"Which of the following best describes a situation of uncertainty in decision-making?", choices:["A. There is insufficient information and outcomes are not guaranteed","B. All information is available","C. Decisions are made with certainty","D. The outcome is always positive"], answer:0 },
+    { q:"Which of the following best describes a deterministic simulation model?", choices:["A. All decisions are made under uncertainty","B. Alternatives are clearly known in advance","C. It is always used in Monte Carlo simulation","D. Random numbers are used for decision variables"], answer:1 },
+    { q:"Which rule is used to find the probability of either event A or event B occurring?", choices:["A. Rule of independence","B. Rule of complements","C. Rule of unions","D. Rule of intersections"], answer:2 },
+    { q:"Which distribution is described as a bell-shaped curve and is widely used for continuous random variables?", choices:["A. Geometric","B. Binomial","C. Poisson","D. Normal"], answer:3 },
+    { q:"What is the complement of an event A?", choices:["A. All elements in A","B. All elements in the universal set not in A","C. Intersection of A and B","D. Union of A and B"], answer:1 },
+    { q:"Which of the following is NOT an advantage of simulation?", choices:["A. Simulation always provides optimal solutions","B. Policy decisions can be made faster","C. Flexibility in analysing complex problems","D. Experiments without disturbing real systems"], answer:0 },
+    { q:"Which of the following is a key feature of Monte Carlo simulation?", choices:["A. It relies on random sampling from probability distributions","B. Only deterministic models","C. No data required","D. Guarantees optimal solutions"], answer:0 },
+    { q:"Which of the following is NOT a characteristic of objective probability?", choices:["A. Based on equally likely events","B. Same for all observers","C. Based on personal beliefs","D. Long run relative frequency"], answer:2 },
+    { q:"What is the first step in conducting a Monte Carlo simulation?", choices:["A. Validate the model","B. Establish a probability distribution for the variables","C. Select the best alternative","D. Generate random numbers"], answer:1 },
+    { q:"What is a random variable?", choices:["A. Outcome of one experiment","B. A variable that is always constant","C. A function that assigns a value to each element of a sample space","D. The sum of all probabilities"], answer:2 }
   ];
 
   let current = 0;
   let userAnswers = [];
-  let timeLeft = 900;  // 15 minutes in seconds
+  let timeLeft = 900;
   let timerInterval;
-  const container = document.getElementById("quiz-container");
-  const timerDisplay = document.getElementById("timer");
+
+  const container   = document.getElementById("quiz-container");
+  const timerEl     = document.getElementById("timer");
+  const progressFill  = document.getElementById("progress-fill");
+  const progressLabel = document.getElementById("progress-label");
 
   function startTimer() {
     clearInterval(timerInterval);
     timeLeft = 900;
-    timerDisplay.style.display = "block";
+    timerEl.classList.remove("urgent");
     updateTimer();
     timerInterval = setInterval(() => {
       timeLeft--;
       updateTimer();
-      if (timeLeft <= 0) {
-        clearInterval(timerInterval);
-        autoSubmit();
-      }
+      if (timeLeft <= 60) timerEl.classList.add("urgent");
+      if (timeLeft <= 0) { clearInterval(timerInterval); autoSubmit(); }
     }, 1000);
   }
 
   function updateTimer() {
     const m = Math.floor(timeLeft / 60);
     const s = timeLeft % 60;
-    timerDisplay.textContent = `Time: ${m}:${s.toString().padStart(2,"0")}`;
+    timerEl.textContent = `${m}:${s.toString().padStart(2,"0")}`;
+  }
+
+  function updateProgress(i) {
+    const pct = ((i) / questions.length) * 100;
+    progressFill.style.width = pct + "%";
+    progressLabel.textContent = `Question ${i + 1} of ${questions.length}`;
   }
 
   function showQuestion(i) {
+    updateProgress(i);
     const q = questions[i];
     container.innerHTML = `
-      <div class="question">
-        <h2>${q.q}</h2>
+      <div class="q-card">
+        <div class="q-number">Question ${i + 1} of ${questions.length}</div>
+        <div class="q-text">${q.q}</div>
         <ul class="answers">
-          ${q.choices.map((c,idx) => `
+          ${q.choices.map((c, idx) => `
             <li>
               <label>
                 <input type="radio" name="choice" value="${idx}" ${userAnswers[i] === idx ? "checked" : ""}>
-                ${c}
+                <span>${c}</span>
               </label>
             </li>
           `).join("")}
         </ul>
         <div class="nav-buttons">
-          <button id="prev" ${i===0 ? "disabled" : ""}>← Previous</button>
-          <button id="next">${i === questions.length - 1 ? "Finish" : "Next →"}</button>
+          <button class="btn btn-outline" id="prev" ${i === 0 ? "disabled" : ""}>← Previous</button>
+          <button class="btn btn-primary" id="next">${i === questions.length - 1 ? "Submit Quiz" : "Next →"}</button>
         </div>
       </div>
     `;
-    if (i > 0) {
-      document.getElementById("prev").onclick = () => {
-        saveAnswer(i);
-        current--;
-        showQuestion(current);
-      };
-    }
+
+    document.getElementById("prev").onclick = () => {
+      saveAnswer(i, false);
+      current--;
+      showQuestion(current);
+    };
     document.getElementById("next").onclick = () => {
-      if (!saveAnswer(i)) return;
+      if (!saveAnswer(i, true)) return;
       if (i < questions.length - 1) {
         current++;
         showQuestion(current);
@@ -199,13 +386,18 @@
     };
   }
 
-  function saveAnswer(i) {
+  function saveAnswer(i, requireAnswer) {
     const sel = document.querySelector("input[name='choice']:checked");
-    if (!sel) {
-      alert("Please select an answer!");
+    if (!sel && requireAnswer) {
+      // Shake the card
+      const card = document.querySelector(".q-card");
+      card.style.animation = "none";
+      card.offsetHeight;
+      card.style.animation = "shake 0.35s ease";
+      alert("Please select an answer before continuing.");
       return false;
     }
-    userAnswers[i] = parseInt(sel.value);
+    if (sel) userAnswers[i] = parseInt(sel.value);
     return true;
   }
 
@@ -217,40 +409,55 @@
   }
 
   function showResults() {
-    timerDisplay.style.display = "none";
-    let score = 0;
-    container.innerHTML = `<div id="result"><h2>Results</h2></div>`;
-    const ul = document.createElement("ul");
-    questions.forEach((q, i) => {
-      const li = document.createElement("li");
-      if (userAnswers[i] === q.answer) {
-        score++;
-        li.textContent = `Q${i+1}: ✅ Correct — Your answer: ${q.choices[q.answer]}`;
-        li.className = "correct-answer";
-      } else {
-        li.textContent = `Q${i+1}: ❌ Wrong — Correct answer: ${q.choices[q.answer]}`;
-        li.className = "wrong-answer";
-      }
-      ul.appendChild(li);
-    });
-    container.appendChild(ul);
-    container.innerHTML += `<p>Your score: ${score} / ${questions.length}</p>`;
+    timerEl.style.display = "none";
+    progressFill.style.width = "100%";
+    progressLabel.textContent = "Quiz complete";
 
-    const restartBtn = document.createElement("button");
-    restartBtn.textContent = "Restart Quiz";
-    restartBtn.onclick = () => {
+    let score = 0;
+    let itemsHTML = "";
+
+    questions.forEach((q, i) => {
+      const isCorrect = userAnswers[i] === q.answer;
+      if (isCorrect) score++;
+      const cls = isCorrect ? "correct" : "wrong";
+      const label = isCorrect ? "✓ Correct" : "✗ Incorrect";
+      const yourAns = userAnswers[i] >= 0 ? q.choices[userAnswers[i]] : "No answer";
+      itemsHTML += `
+        <li class="result-item ${cls}">
+          <div class="ri-label">${label}</div>
+          <div class="ri-q">Q${i+1}: ${q.q}</div>
+          <div class="ri-ans">Your answer: ${yourAns}</div>
+          ${!isCorrect ? `<div class="ri-correct">Correct answer: ${q.choices[q.answer]}</div>` : ""}
+        </li>
+      `;
+    });
+
+    const pct = Math.round((score / questions.length) * 100);
+    const grade = pct >= 80 ? "Excellent work!" : pct >= 60 ? "Good effort  keep reviewing!" : "Keep studying you've got this!";
+
+    container.innerHTML = `
+      <div class="results-header">
+        <h2>Quiz Complete</h2>
+        <div class="score-badge">${score} / ${questions.length}</div>
+        <div class="score-sub">${pct}% — ${grade}</div>
+      </div>
+      <ul class="result-list">${itemsHTML}</ul>
+      <div class="results-actions">
+        <button class="btn btn-primary" id="restart-btn">Retake Quiz</button>
+      </div>
+    `;
+
+    document.getElementById("restart-btn").onclick = () => {
       userAnswers = [];
       current = 0;
+      timerEl.style.display = "";
       startTimer();
       showQuestion(current);
     };
-    container.appendChild(restartBtn);
   }
 
-  // initialize
   startTimer();
   showQuestion(current);
 </script>
-
 </body>
 </html>
